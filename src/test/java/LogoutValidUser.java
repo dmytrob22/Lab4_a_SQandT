@@ -1,4 +1,5 @@
 import com.microsoft.playwright.*;
+import io.qameta.allure.Step;
 import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -31,32 +32,68 @@ public class LogoutValidUser {
 
     @Test
     public void testLogout() {
-        // Step 2: Navigate to the URL
+        navigateToUrl();
+
+        verifyHomePageVisible();
+
+        clickSignupLogin();
+
+        verifyLoginVisible();
+
+        enterCredentials();
+
+        clickLogin();
+
+        verifyLoggedIn();
+
+        clickLogout();
+
+        verifyUserNavigatedToLoginPage();
+    }
+
+    @Step("Step 1: Navigate to the URL")
+    private void navigateToUrl() {
         page.navigate("http://automationexercise.com");
+    }
 
-        // Step 3: Verify that home page is visible successfully
+    @Step("Step 2: Verify that home page is visible successfully")
+    private void verifyHomePageVisible() {
         assertTrue(page.title().contains("Automation Exercise"));
+    }
 
-        // Step 4: Click on 'Signup / Login' button
+    @Step("Step 3: Click on 'Signup / Login' button")
+    private void clickSignupLogin() {
         page.click("a[href='/login']");
+    }
 
-        // Step 5: Verify 'Login to your account' is visible
+    @Step("Step 4: Verify 'Login to your account' is visible")
+    private void verifyLoginVisible() {
         assertTrue(page.locator("h2:has-text('Login to your account')").isVisible());
+    }
 
-        // Step 6: Enter correct email address and password
+    @Step("Step 5: Enter correct email address and password")
+    private void enterCredentials() {
         page.fill("input[data-qa='login-email']", email);
         page.fill("input[data-qa='login-password']", password);
+    }
 
-        // Step 7: Click 'login' button
+    @Step("Step 6: Click 'login' button")
+    private void clickLogin() {
         page.click("button[data-qa='login-button']");
+    }
 
-        // Step 8: Verify that 'Logged in as username' is visible
+    @Step("Step 7: Verify that 'Logged in as username' is visible")
+    private void verifyLoggedIn() {
         assertTrue(page.locator("a:has-text('Logged in as " + username + "')").isVisible());
+    }
 
-        // Step 9: Click 'Logout' button
+    @Step("Step 8: Click 'Logout' button")
+    private void clickLogout() {
         page.click("a[href='/logout']");
+    }
 
-        // Step 10: Verify that user is navigated to login page
+    @Step("Step 9: Verify that user is navigated to login page")
+    private void verifyUserNavigatedToLoginPage() {
         assertTrue(page.locator("h2:has-text('Login to your account')").isVisible());
     }
 }
